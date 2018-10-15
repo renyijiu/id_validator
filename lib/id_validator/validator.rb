@@ -18,5 +18,25 @@ module IdValidator
       true
     end
 
+    # 获取身份证详细信息
+    def get_info(id_card)
+      return false unless is_valid?(id_card)
+
+      code = get_id_argument(id_card)
+      address_info = get_address_info(code[:address_code])
+
+      {
+        address_code: code[:address_code],
+        address: IdValidator::Concern::Func.format_address_info(address_info),
+        abandoned: check_is_abandoned(code[:address_code]),
+        birthday_code: IdValidator::Concern::Func.format_birthday_code(code[:birthday_code]),
+        constellation: get_constellation(code[:birthday_code]),
+        chinese_zodiac: get_chinese_zodiac(code[:birthday_code]),
+        sex: code[:order_code].to_i % 2,
+        length: code[:type],
+        check_bit: code[:check_bit]
+      }
+    end
+
   end
 end

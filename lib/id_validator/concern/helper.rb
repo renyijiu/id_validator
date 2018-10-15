@@ -14,6 +14,15 @@ module IdValidator
         true
       end
 
+      # 格式化出生日期
+      def format_birthday_code(birthday_code)
+        "#{birthday_code[0..3]}-#{birthday_code[4..5]}-#{birthday_code[6..7]}"
+      end
+
+      # 格式化地址栏
+      def format_address_info(address_info)
+        "#{address_info[:province]}#{address_info[:city]}#{address_info[:district]}"
+      end
     end
 
     module Helper
@@ -67,6 +76,32 @@ module IdValidator
         }
       end
 
+      # 获取星座信息
+      def get_constellation(birthday_code)
+        date = Date.parse(birthday_code.to_s)
+
+        month = date.month
+        day = date.day
+        constellation = IdValidator::Config.constellation
+
+        start_day = constellation[month][:start_date].split('-').last.to_i
+        if day < start_day
+          tmp_month = month - 1 == 0 ? 12 : month - 1
+
+          constellation[tmp_month][:name]
+        else
+          constellation[month][:name]
+        end
+      end
+
+      # 获取生肖信息
+      def get_chinese_zodiac(birthday_code)
+        # 1900为子鼠
+        index = (birthday_code[0...4].to_i - 1900) % 12
+
+        IdValidator::Config.chinese_zodiac[index]
+      end
+
       # 检查地址码
       def check_address_code(address_code)
         address_info = get_address_info(address_code.to_s)
@@ -87,6 +122,13 @@ module IdValidator
         return false if order_code.length != 3
 
         true
+      end
+
+      # 检查是否已经废弃
+      def check_is_abandoned(address_code)
+        address = IdValidator::Config.abandoned_address_code.fetch(address_code.to_i, nil)
+
+        !address.nil?
       end
 
       # 生成校验码
