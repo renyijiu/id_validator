@@ -211,5 +211,4 @@ class IdValidator::Concern::HelperTest < Minitest::Test
     assert_equal '2', @object.generate_check_bit(@id_card_4[0...17])
   end
 
-
 end

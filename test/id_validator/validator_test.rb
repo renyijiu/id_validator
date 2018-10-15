@@ -10,7 +10,7 @@ class IdValidator::ValidatorTest < Minitest::Test
     @id_card_4 = '830000199201300022'
   end
 
-  def test_id_crad_is_valid
+  def test_id_card_is_valid
     validator = IdValidator::Validator.new
 
     assert validator.is_valid?(@id_card_1)
