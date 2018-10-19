@@ -85,4 +85,36 @@ class IdValidator::ValidatorTest < Minitest::Test
     assert_equal 18, info[:length]
     assert_equal '2', info[:check_bit]
   end
+
+  def test_should_get_fake_id_15
+    validator = IdValidator::Validator.new
+
+    res_1 = validator.fake_id(false)
+    res_2 = validator.fake_id(false, '上海市')
+    res_3 = validator.fake_id(false, '南山区', '199301')
+    res_4 = validator.fake_id(false, '江苏省', '19930101')
+    res_5 = validator.fake_id(false, '厦门市', '19930101', 1)
+
+    assert validator.is_valid?(res_1)
+    assert validator.is_valid?(res_2)
+    assert validator.is_valid?(res_3)
+    assert validator.is_valid?(res_4)
+    assert validator.is_valid?(res_5)
+  end
+
+  def test_should_get_fake_id_18
+    validator = IdValidator::Validator.new
+
+    res_1 = validator.fake_id(true)
+    res_2 = validator.fake_id(true, '上海市')
+    res_3 = validator.fake_id(true, '南山区', '199301')
+    res_4 = validator.fake_id(true, '江苏省', '19930101')
+    res_5 = validator.fake_id(true, '厦门市', '19930101', 1)
+
+    assert validator.is_valid?(res_1)
+    assert validator.is_valid?(res_2)
+    assert validator.is_valid?(res_3)
+    assert validator.is_valid?(res_4)
+    assert validator.is_valid?(res_5)
+  end
 end

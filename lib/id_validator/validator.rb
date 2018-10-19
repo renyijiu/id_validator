@@ -38,5 +38,19 @@ module IdValidator
       }
     end
 
+    # 构建虚假身份证信息
+    def fake_id(eighteen = true, address = nil, birthday = nil, sex = nil)
+      address_code = generate_address_code(address)
+      birthday_code = generate_birthday_code(birthday)
+      order_code = generate_order_code(sex)
+
+      return address_code + birthday_code[2..-1] + order_code unless eighteen
+
+      body = address_code + birthday_code + order_code
+      check_bit = generate_check_bit(body)
+
+      body + check_bit
+    end
+
   end
 end

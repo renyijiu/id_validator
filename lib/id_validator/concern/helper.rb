@@ -23,6 +23,34 @@ module IdValidator
       def format_address_info(address_info)
         "#{address_info[:province]}#{address_info[:city]}#{address_info[:district]}"
       end
+
+      # 随意获取一个符合要求的地址码
+      def get_random_address_code(reg)
+        keys = IdValidator::Config.address_info.keys.shuffle
+
+        keys.find { |key| key.to_s =~ reg }.to_s
+      end
+
+      # 字符串填充
+      def get_str_pad(str, length = 2, character = '0', right = true)
+        str = str.to_s
+        return str if length <= str.length
+
+        frequency = length - str.length
+        right ? (str + character.to_s * frequency) : (character.to_s * frequency + str)
+      end
+
+      # 随机获取一个符合条件的数字
+      def get_random_right_num(num, min, max)
+        return num if (min..max).member?(num)
+
+        rand(min..max)
+      end
+
+      # 随意生成一个生日
+      def get_random_birthday_code
+        Time.at(rand * Time.now.to_i).strftime('%Y%m%d')
+      end
     end
 
     module Helper
@@ -142,6 +170,58 @@ module IdValidator
 
         check_bit = (12 - (body_sum % 11)) % 11
         check_bit < 10 ? check_bit.to_s : 'X'
+      end
+
+      # 生成地址码
+      def generate_address_code(address)
+        key = IdValidator::Config.address_info.key(address).to_s
+
+        case
+        when key.empty?
+          reg = %r(^\d{4}(?!00)\d{2}$)
+          return Func.get_random_address_code(reg)
+        when key[0] == '8'
+          return key
+        when key =~ /^\d{2}0000$/
+          reg = %r(^#{key[0..1]}\d{2}(?!00)\d{2}$)
+          return Func.get_random_address_code(reg)
+        when key =~ /^\d{4}00$/
+          reg = %r(^#{key[0..3]}(?!00)\d{2}$)
+          return Func.get_random_address_code(reg)
+        else
+          return key.to_s
+        end
+      end
+
+      # 生成生日信息
+      def generate_birthday_code(birthday)
+        return birthday if Func.check_birthday(birthday)
+        birthday = Func.get_str_pad(birthday.to_s, 8)
+
+        year = Func.get_random_right_num(birthday[0..3].to_i, 1900, Time.now.year - 1)
+        month = Func.get_random_right_num(birthday[4..5].to_i, 1, 12)
+        day = Func.get_random_right_num(birthday[6..7], 1, 28)
+
+        year = Func.get_str_pad(year.to_s, 4)
+        month = Func.get_str_pad(month.to_s, 2, '0', false)
+        day = Func.get_str_pad(day.to_s, 2, '0', false)
+        result = year + month + day
+
+        if Func.check_birthday(result)
+          result
+        else
+          Func.get_random_birthday_code
+        end
+      end
+
+      # 生成顺序码
+      def generate_order_code(sex)
+        order_code = rand(1..999)
+
+        order_code = order_code % 2 == 0 ? order_code : order_code - 1 if sex == 0
+        order_code = order_code % 2 == 0 ? order_code - 1 : order_code if sex == 1
+
+        Func.get_str_pad(order_code, 3, '0', false)
       end
 
     end

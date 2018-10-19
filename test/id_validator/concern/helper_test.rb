@@ -47,6 +47,42 @@ class IdValidator::Concern::HelperTest < Minitest::Test
     assert_equal '陕西省西安市莲湖区', res
   end
 
+  def test_func_random_address_code
+    reg = %r(^\d{4}(?!00)\d{2}$)
+    res = IdValidator::Concern::Func.get_random_address_code(reg)
+
+    assert_match reg, res
+  end
+
+  def test_func_get_str_pad
+    str = 'hello'
+    res_1 = IdValidator::Concern::Func.get_str_pad(str, 10)
+    res_2 = IdValidator::Concern::Func.get_str_pad(str, 10, '0', false)
+
+    assert_equal 'hello00000', res_1
+    assert_equal '00000hello', res_2
+  end
+
+  def test_func_get_random_num
+    res_1 = IdValidator::Concern::Func.get_random_right_num(1, 1, 10)
+    res_2 = IdValidator::Concern::Func.get_random_right_num(0, 1, 10)
+    res_3 = IdValidator::Concern::Func.get_random_right_num(5, 1, 10)
+    res_4 = IdValidator::Concern::Func.get_random_right_num(10, 1, 10)
+    res_5 = IdValidator::Concern::Func.get_random_right_num(15, 1, 10)
+
+    assert (1..10).include?(res_1)
+    assert (1..10).include?(res_2)
+    assert (1..10).include?(res_3)
+    assert (1..10).include?(res_4)
+    assert (1..10).include?(res_5)
+  end
+
+  def test_func_get_random_birthday
+    res = IdValidator::Concern::Func.get_random_birthday_code
+
+    assert IdValidator::Concern::Func.check_birthday(res)
+  end
+
   def test_should_get_id_argument_1
     code = @object.get_id_argument(@id_card_1)
 
@@ -209,6 +245,49 @@ class IdValidator::Concern::HelperTest < Minitest::Test
     assert_nil @object.generate_check_bit(@id_card_2)
     assert_equal '1', @object.generate_check_bit(@id_card_3[0...17])
     assert_equal '2', @object.generate_check_bit(@id_card_4[0...17])
+  end
+
+  def test_should_generate_addresses_code
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code(nil)
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code('陕西省')
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code('西安市')
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code('碑林区')
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code('未央区')
+    assert_match %r(^\d{4}(?!00)\d{2}$), @object.generate_address_code('凤县')
+    assert_equal '830000' , @object.generate_address_code('台湾省')
+  end
+
+  def test_should_generate_birthday_code
+    res_1 = @object.generate_birthday_code(nil)
+    res_2 = @object.generate_birthday_code('1993')
+    res_3 = @object.generate_birthday_code('199301')
+    res_4 = @object.generate_birthday_code('19930101')
+    res_5 = @object.generate_birthday_code('1700')
+
+    assert IdValidator::Concern::Func.check_birthday(res_1)
+    assert IdValidator::Concern::Func.check_birthday(res_2)
+    assert IdValidator::Concern::Func.check_birthday(res_3)
+    assert IdValidator::Concern::Func.check_birthday(res_4)
+    assert IdValidator::Concern::Func.check_birthday(res_5)
+
+    assert res_2.include?('1993')
+    assert res_3.include?('199301')
+    assert res_4.include?('19930101')
+  end
+
+  def test_should_generate_order_code
+    res_1 = @object.generate_order_code(1)
+    res_2 = @object.generate_order_code(0)
+    res_3 = @object.generate_order_code(nil)
+
+    assert_equal 3, res_1.length
+    assert_equal 3, res_2.length
+    assert_equal 3, res_3.length
+    assert (1..999).include?(res_1.to_i)
+    assert (1..999).include?(res_2.to_i)
+    assert (1..999).include?(res_3.to_i)
+    assert_equal 1, res_1.to_i % 2
+    assert_equal 0, res_2.to_i % 2
   end
 
 end
