@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/renyijiu/id_validator.svg?branch=master)](https://travis-ci.com/renyijiu/id_validator)
+[![Gem Version](https://badge.fury.io/rb/id_validator.svg)](https://badge.fury.io/rb/id_validator)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c12676a3c0261956e06c/maintainability)](https://codeclimate.com/github/renyijiu/id_validator/maintainability)
+
 # IdValidator
 
 **中华人民共和国居民身份证** 、**中华人民共和国港澳居民居住证** 以及 **中华人民共和国台湾居民居住证** 号码验证工具（Ruby
