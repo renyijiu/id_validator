@@ -52,5 +52,15 @@ module IdValidator
       body + check_bit
     end
 
+    # 身份证号升级（15位 升级为 18位）
+    def upgrade_id(id_card)
+      return false unless (id_card.length == 15 && is_valid?(id_card))
+
+      code = get_id_argument(id_card)
+      body = code[:address_code] + code[:birthday_code] + code[:order_code]
+
+      body + generate_check_bit(body)
+    end
+
   end
 end

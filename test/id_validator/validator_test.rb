@@ -117,4 +117,21 @@ class IdValidator::ValidatorTest < Minitest::Test
     assert validator.is_valid?(res_4)
     assert validator.is_valid?(res_5)
   end
+
+  def test_should_upgrade_id_15
+    validator = IdValidator::Validator.new
+
+    res = validator.upgrade_id(@id_card_2)
+
+    assert_equal 18, res.length
+    assert validator.is_valid?(res)
+  end
+
+  def test_should_upgrade_id_18
+    validator = IdValidator::Validator.new
+
+    res = validator.upgrade_id(@id_card_1)
+
+    assert_equal false, res
+  end
 end
