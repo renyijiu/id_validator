@@ -218,8 +218,7 @@ module IdValidator
       def generate_order_code(sex)
         order_code = rand(1..999)
 
-        if sex != order_code % 2
-          order_code -= 1
+        order_code -= 1 if sex != (order_code % 2)
 
         Func.get_str_pad(order_code, 3, '0', false)
       end
