@@ -152,9 +152,9 @@ module IdValidator
 
       # 检查是否已经废弃
       def check_is_abandoned(address_code)
-        address = IdValidator::Config.abandoned_address_code.fetch(address_code.to_i, nil)
+        address = IdValidator::Config.latest_address_info.fetch(address_code.to_i, nil)
 
-        !address.nil?
+        address.nil?
       end
 
       # 生成校验码
