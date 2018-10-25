@@ -26,7 +26,7 @@ module IdValidator
 
       # 随意获取一个符合要求的地址码
       def get_random_address_code(reg)
-        keys = IdValidator::Config.address_info.keys.shuffle
+        keys = IdValidator::Config.latest_address_info.keys.shuffle
 
         keys.find { |key| key.to_s =~ reg }.to_s
       end
@@ -50,6 +50,15 @@ module IdValidator
       # 随意生成一个生日
       def get_random_birthday_code
         Time.at(rand * Time.now.to_i).strftime('%Y%m%d')
+      end
+
+      # 获取指定区划代码最新的地址名称
+      def get_address_info(address_code)
+        address_code = address_code.to_i
+        address_arr = IdValidator::Config.total_address_info.fetch(address_code, [])
+
+        address = address_arr.sort_by{|a| a[:end_year]}.last || {}
+        address.fetch(:address, nil)
       end
     end
 
@@ -81,26 +90,15 @@ module IdValidator
 
       # 获取地址信息
       def get_address_info(address_code)
-        address_code_hash = IdValidator::Config.address_info
-        abandoned_address_code_hash = IdValidator::Config.abandoned_address_code
+        province_address_code = "#{address_code[0...2]}0000"
+        city_address_code = "#{address_code[0...4]}00"
 
-        province_address_code = "#{address_code[0...2]}0000".to_i
-        city_address_code = "#{address_code[0...4]}00".to_i
-
-        province = address_code_hash[province_address_code] || abandoned_address_code_hash[province_address_code]
-
-        if address_code[0].to_i != 8
-          city = address_code_hash[city_address_code] || abandoned_address_code_hash[city_address_code]
-          district = address_code_hash[address_code.to_i] ||abandoned_address_code_hash[address_code.to_i]
-        else
-          city = nil
-          district = nil
-        end
+        is_mainland = (address_code[0].to_i != 8)
 
         {
-            province: province,
-            city: city,
-            district: district
+            province: Func.get_address_info(province_address_code),
+            city: is_mainland ? Func.get_address_info(city_address_code) : nil,
+            district: is_mainland ? Func.get_address_info(address_code) : nil
         }
       end
 
@@ -154,9 +152,9 @@ module IdValidator
 
       # 检查是否已经废弃
       def check_is_abandoned(address_code)
-        address = IdValidator::Config.abandoned_address_code.fetch(address_code.to_i, nil)
+        address = IdValidator::Config.latest_address_info.fetch(address_code.to_i, nil)
 
-        !address.nil?
+        address.nil?
       end
 
       # 生成校验码
@@ -174,7 +172,7 @@ module IdValidator
 
       # 生成地址码
       def generate_address_code(address)
-        key = IdValidator::Config.address_info.key(address).to_s
+        key = IdValidator::Config.latest_address_info.key(address).to_s
 
         case
         when key.empty?

@@ -83,6 +83,13 @@ class IdValidator::Concern::HelperTest < Minitest::Test
     assert IdValidator::Concern::Func.check_birthday(res)
   end
 
+  def test_func_get_address_info
+    code = IdValidator::Config.latest_address_info.keys.sample
+    res = IdValidator::Concern::Func.get_address_info(code)
+
+    assert_equal IdValidator::Config.latest_address_info.fetch(code), res
+  end
+
   def test_should_get_id_argument_1
     code = @object.get_id_argument(@id_card_1)
 
