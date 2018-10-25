@@ -106,7 +106,7 @@ IdValidator.upgrade_id('610104620927690')
 
 - [中华人民共和国民政部：行政区划代码](http://www.mca.gov.cn/article/sj/xzqh/)
 
-- [中华人民共和国行政区划代码历史数据集](https://github.com/jxlwqq/address-code-of-china)
+- [中华人民共和国行政区划代码历史数据集](https://github.com/renyijiu/address-code-of-china)
 
 - [国务院办公厅关于印发《港澳台居民居住证申领发放办法》的通知](http://www.gov.cn/zhengce/content/2018-08/19/content_5314865.htm)
 
