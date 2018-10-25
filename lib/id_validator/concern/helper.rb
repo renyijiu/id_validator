@@ -26,7 +26,7 @@ module IdValidator
 
       # 随意获取一个符合要求的地址码
       def get_random_address_code(reg)
-        keys = IdValidator::Config.address_info.keys.shuffle
+        keys = IdValidator::Config.latest_address_info.keys.shuffle
 
         keys.find { |key| key.to_s =~ reg }.to_s
       end
@@ -174,7 +174,7 @@ module IdValidator
 
       # 生成地址码
       def generate_address_code(address)
-        key = IdValidator::Config.address_info.key(address).to_s
+        key = IdValidator::Config.latest_address_info.key(address).to_s
 
         case
         when key.empty?
