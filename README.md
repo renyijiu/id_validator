@@ -63,15 +63,15 @@ IdValidator.get_info('610104620927690')    # 大陆居民身份证 15 位
 
 ```ruby
 {
-    :address_code => "440308",         # 地址码
-    :address => "广东省深圳市盐田区",      # 地址信息
-    :abandoned => false,               # 地址码是否已经废弃
-    :birthday_code => "1999-01-10",    # 出生日期
-    :constellation => "摩羯座",         # 星座
-    :chinese_zodiac => "卯兔",          # 生肖 
-    :sex => 1,                         # 性别，0：女性，1：男性
-    :length => 18,                     # 号码长度 
-    :check_bit=>"2"                    # 校验码
+    :address_code => "440308",                   # 地址码
+    :address => ["广东省", "深圳市", "盐田区"],      # 地址信息，三元组（省，市，区）
+    :abandoned => false,                         # 地址码是否已经废弃
+    :birthday_code => "1999-01-10",              # 出生日期
+    :constellation => "摩羯座",                   # 星座
+    :chinese_zodiac => "卯兔",                    # 生肖 
+    :sex => 1,                                   # 性别，0：女性，1：男性
+    :length => 18,                               # 号码长度 
+    :check_bit=>"2"                              # 校验码
 }
 ```
  
