@@ -44,7 +44,7 @@ class IdValidator::Concern::HelperTest < Minitest::Test
     }
 
     res = IdValidator::Concern::Func.format_address_info(address_info)
-    assert_equal '陕西省西安市莲湖区', res
+    assert_equal ['陕西省', '西安市', '莲湖区'], res
   end
 
   def test_func_random_address_code

@@ -28,7 +28,7 @@ class IdValidator::ValidatorTest < Minitest::Test
 
     assert_kind_of Hash, info
     assert_equal '440308', info[:address_code]
-    assert_equal '广东省深圳市盐田区', info[:address]
+    assert_equal ['广东省', '深圳市', '盐田区'], info[:address]
     assert_equal false, info[:abandoned]
     assert_equal '1999-01-10', info[:birthday_code]
     assert_equal '摩羯座', info[:constellation]
@@ -44,7 +44,7 @@ class IdValidator::ValidatorTest < Minitest::Test
 
     assert_kind_of Hash, info
     assert_equal '610104', info[:address_code]
-    assert_equal '陕西省西安市莲湖区', info[:address]
+    assert_equal ['陕西省', '西安市', '莲湖区'], info[:address]
     assert_equal false, info[:abandoned]
     assert_equal '1962-09-27', info[:birthday_code]
     assert_equal '天秤座', info[:constellation]
@@ -60,7 +60,7 @@ class IdValidator::ValidatorTest < Minitest::Test
 
     assert_kind_of Hash, info
     assert_equal '810000', info[:address_code]
-    assert_equal '香港特别行政区', info[:address]
+    assert_equal ['香港特别行政区', nil, nil], info[:address]
     assert_equal false, info[:abandoned]
     assert_equal '1994-08-23', info[:birthday_code]
     assert_equal '处女座', info[:constellation]
@@ -76,7 +76,7 @@ class IdValidator::ValidatorTest < Minitest::Test
 
     assert_kind_of Hash, info
     assert_equal '830000', info[:address_code]
-    assert_equal '台湾省', info[:address]
+    assert_equal ['台湾省', nil, nil], info[:address]
     assert_equal false, info[:abandoned]
     assert_equal '1992-01-30', info[:birthday_code]
     assert_equal '水瓶座', info[:constellation]

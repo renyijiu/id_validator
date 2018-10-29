@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    id_validator (0.1.0)
+    id_validator (0.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -19,4 +19,4 @@ DEPENDENCIES
   rake (~> 10.0)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
