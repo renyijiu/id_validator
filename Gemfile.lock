@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    id_validator (0.2.0)
+    id_validator (0.3.0)
 
 GEM
   remote: https://rubygems.org/
