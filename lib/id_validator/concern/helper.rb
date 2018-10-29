@@ -19,9 +19,9 @@ module IdValidator
         "#{birthday_code[0..3]}-#{birthday_code[4..5]}-#{birthday_code[6..7]}"
       end
 
-      # 格式化地址栏
+      # 格式化地址栏，地址三元组（省，市，区）
       def format_address_info(address_info)
-        "#{address_info[:province]}#{address_info[:city]}#{address_info[:district]}"
+        [address_info[:province], address_info[:city], address_info[:district]]
       end
 
       # 随意获取一个符合要求的地址码
